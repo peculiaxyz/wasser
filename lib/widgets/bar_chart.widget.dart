@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wasser/models/models_proxy.dart';
 
 class BarChartSample4 extends StatefulWidget {
-  final List<WaterUsage> usageData;
+  final List<RemainingBalanceModel> usageData;
 
   @override
   State<StatefulWidget> createState() => BarChartSample4State();
@@ -99,7 +99,7 @@ class BarChartSample4State extends State<BarChartSample4> {
       xAxisPosition++;
       return BarChartGroupData(x: xAxisPosition, barRods: [
         BarChartRodData(
-            width: 20, y: e.usage, rodStackItems: [BarChartRodStackItem(xAxisPosition as double, e.usage, dark)])
+            width: 20, y: e.balance, rodStackItems: [BarChartRodStackItem(xAxisPosition as double, e.balance, dark)])
       ]);
     }).toList();
   }

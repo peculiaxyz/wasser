@@ -49,10 +49,8 @@ class _TrackUsageScreenState extends State<TrackUsageScreen> {
     try {
       if (!_formKey.currentState.validate()) return;
       _onLoading(context);
-      await Future.delayed(Duration(seconds: 3));
       var data = RemainingBalanceModel(balance: _remainingBalance, dateRecorded: _dateRecorded);
-      // await _usageService.saveRemainingWaterBalance(data);
-
+      await _usageService.saveRemainingWaterBalance(data);
       setState(() {
         _remainingBalance = 0;
         _dateRecorded = DateTime.now();

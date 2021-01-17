@@ -14,7 +14,7 @@ class RemainingBalanceModel {
   factory RemainingBalanceModel.fromJson(Map<String, dynamic> jsonData) {
     return RemainingBalanceModel(
         id: jsonData["id"],
-        balance: jsonData["usage"],
+        balance: jsonData["balance"],
         dateRecorded: convertTmStampToDate(jsonData["dateRecorded"] as Timestamp));
   }
 

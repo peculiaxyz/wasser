@@ -3,8 +3,6 @@ import 'package:wasser/screens/screens.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wasser/screens/track.screen.dart';
 
-import 'widgets/common.widgets.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -12,6 +10,13 @@ void main() async {
 }
 
 class WasserApp extends StatelessWidget {
+  // final _routes = {
+  //       "/": (context) => _WasserAppContainer(),
+  //       "/usage": (context) => UsageSummaryScreen(),
+  //       "/balance": (context) => UsageSummaryScreen(),
+  //       "/track": (context) => TrackUsageScreen(),
+  // };
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,12 +24,7 @@ class WasserApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      routes: {
-        "/": (context) => _WasserAppContainer(),
-        "/usage": (context) => UsageSummaryScreen(),
-        "/balance": (context) => UsageSummaryScreen(),
-        "/track": (context) => TrackUsageScreen(),
-      },
+      home: _WasserAppContainer(),
     );
   }
 }

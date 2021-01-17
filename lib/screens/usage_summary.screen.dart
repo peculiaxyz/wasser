@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wasser/models/models_proxy.dart';
 import 'package:wasser/widgets/bar_chart.widget.dart';
-import 'package:wasser/widgets/widgets.dart';
 import 'package:wasser/services/services_proxy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -11,8 +10,9 @@ class UsageSummaryScreen extends StatelessWidget {
 
   UsageSummaryScreen({this.navigator});
 
-  List<WaterUsage> _mapToUsageModel(List<QueryDocumentSnapshot> documents) {
-    return documents.map((e) => WaterUsage.fromJson(e.data())).toList();
+  List<RemainingBalanceModel> _mapToUsageModel(List<QueryDocumentSnapshot> documents) {
+    print("Attempting to map docs: $documents");
+    return documents.map((e) => RemainingBalanceModel.fromJson(e.data())).toList();
   }
 
   @override
