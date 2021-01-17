@@ -26,21 +26,43 @@ class _TrackUsageScreenState extends State<TrackUsageScreen> {
 
   double _remainingBalance = 0;
 
+  void _notify(String message, BuildContext context) async {
+    final snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: 'Undo',
+        onPressed: () {
+          // Some code to undo the change.
+        },
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   String _validateRemainingBalance(String balance) {
     if (balance != null && balance.isNotEmpty && double.tryParse(balance) != null) return null;
     return "Please enter the correct number of litres";
   }
 
-  void _onSaveUsageData() async {
+  void _onSaveUsageData(BuildContext context) async {
     try {
       if (!_formKey.currentState.validate()) return;
+      _onLoading(context);
+      await Future.delayed(Duration(seconds: 3));
       var data = RemainingBalanceModel(balance: _remainingBalance, dateRecorded: _dateRecorded);
       // await _usageService.saveRemainingWaterBalance(data);
-      _remainingBalance = 0;
 
-      print("Water balance saved");
+      setState(() {
+        _remainingBalance = 0;
+        _dateRecorded = DateTime.now();
+      });
+      _notify("Water balance saved", context);
     } on Exception catch (e) {
-      // TODO
+      print("$e");
+      _notify("Unknown error, please try again", context);
+    } finally {
+      Navigator.pop(context); //pop dialog
     }
   }
 
@@ -62,6 +84,21 @@ class _TrackUsageScreenState extends State<TrackUsageScreen> {
         _remainingBalance = double.parse(val);
       });
     }
+  }
+
+  void _onLoading(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
   }
 
   String humanReadableDate(DateTime dt) {
@@ -123,7 +160,7 @@ class _TrackUsageScreenState extends State<TrackUsageScreen> {
                   Icons.save,
                   size: 14,
                 ),
-                onPressed: () => _onSaveUsageData(),
+                onPressed: () => _onSaveUsageData(context),
               ),
             )
           ],
