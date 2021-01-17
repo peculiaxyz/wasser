@@ -16,3 +16,32 @@ class WasserWidgets {
     )
   ];
 }
+
+class BottomNavManager extends StatelessWidget {
+  static final BottomNavManager _instance = null;
+
+  static BottomNavManager get instance => _instance;
+
+  void navigate(BuildContext context, int pageIdx) {
+    switch (pageIdx) {
+      case 0:
+        Navigator.pushNamed(context, "/");
+        break;
+      case 1:
+        Navigator.pushNamed(context, "/balance");
+        break;
+      case 2:
+        Navigator.pushNamed(context, "/track");
+        break;
+      default:
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      onTap: (idx) => navigate(context, idx),
+      items: WasserWidgets.BottomNavBarItems,
+    );
+  }
+}

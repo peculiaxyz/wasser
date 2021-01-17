@@ -6,7 +6,10 @@ import 'package:wasser/services/services_proxy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UsageSummaryScreen extends StatelessWidget {
+  final void Function(BuildContext context, int idx) navigator;
   final _usageService = WaterUsageDataService();
+
+  UsageSummaryScreen({this.navigator});
 
   List<WaterUsage> _mapToUsageModel(List<QueryDocumentSnapshot> documents) {
     return documents.map((e) => WaterUsage.fromJson(e.data())).toList();
@@ -35,9 +38,6 @@ class UsageSummaryScreen extends StatelessWidget {
             },
           ),
         ]),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: WasserWidgets.BottomNavBarItems,
       ),
     );
   }
