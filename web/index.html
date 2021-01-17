@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -24,11 +25,12 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
 
   <title>wasser</title>
   <link rel="manifest" href="manifest.json">
 </head>
+
 <body>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
@@ -40,6 +42,31 @@
       });
     }
   </script>
+
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-app.js" type="application/javascript"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-auth.js" type="application/javascript"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-firestore.js" type="application/javascript"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyD4vnykrACYtoX135BLBP-LyQ8tBKY6h_c",
+      authDomain: "whatsappbusinesscustomdemo.firebaseapp.com",
+      databaseURL: "https://whatsappbusinesscustomdemo.firebaseio.com",
+      projectId: "whatsappbusinesscustomdemo",
+      storageBucket: "whatsappbusinesscustomdemo.appspot.com",
+      messagingSenderId: "112753989588",
+      appId: "1:112753989588:web:9704273e9c8394657ae841"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
   <script src="main.dart.js" type="application/javascript"></script>
 </body>
+
 </html>
