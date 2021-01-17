@@ -22,7 +22,7 @@ class UsageSummaryScreen extends StatelessWidget {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text("Last 7 days"),
           SizedBox(
-            height: 48,
+            height: 52,
           ),
           StreamBuilder(
             stream: _usageService.getRecentUsageInfo(),

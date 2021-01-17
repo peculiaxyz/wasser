@@ -64,7 +64,7 @@ class BarChartSample4State extends State<BarChartSample4> {
                   getTitles: (val) {
                     return "$val";
                   },
-                  showTitles: true,
+                  showTitles: false,
                   getTextStyles: (value) => const TextStyle(
                       color: Color(
                         0xff939393,
@@ -95,29 +95,12 @@ class BarChartSample4State extends State<BarChartSample4> {
 
   List<BarChartGroupData> getData() {
     int xAxisPosition = -1;
-    for (var item in widget.usageData) {
-      print("Usage data item: Usage ${item.usage} ");
-    }
-
     return widget.usageData.map((e) {
       xAxisPosition++;
-      print("X post: $xAxisPosition");
       return BarChartGroupData(x: xAxisPosition, barRods: [
         BarChartRodData(
             width: 20, y: e.usage, rodStackItems: [BarChartRodStackItem(xAxisPosition as double, e.usage, dark)])
       ]);
     }).toList();
-
-    // return [
-    //   BarChartGroupData(
-    //     x: 0,
-    //     barsSpace: 6,
-    //     barRods: [
-    //       BarChartRodData(width: 20, y: 1995, rodStackItems: [
-    //         BarChartRodStackItem(0, 1995, dark),
-    //       ]),
-    //     ],
-    //   ),
-    // ];
   }
 }
