@@ -2,14 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:wasser/screens/screens.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wasser/screens/track.screen.dart';
+import 'package:provider/provider.dart';
+import 'models/models_proxy.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(WasserApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => BottomNavState()),
+      ],
+      child: const WasserApp(),
+    ),
+  );
 }
 
 class WasserApp extends StatelessWidget {
+  const WasserApp({Key key}) : super(key: key);
   // final _routes = {
   //       "/": (context) => _WasserAppContainer(),
   //       "/usage": (context) => UsageSummaryScreen(),
@@ -53,13 +64,22 @@ class __WasserAppContainerState extends State<_WasserAppContainer> {
   }
 
   _onActiveViewChanged(int viewIdx) {
-    setState(() {
-      _currentIdx = viewIdx;
-    });
+    context.read<BottomNavState>().setActivePageIdx(viewIdx);
+    // setState(() {
+    //   _currentIdx = viewIdx;
+    // });
   }
 
-  Widget _getCurrenWidget() {
-    switch (_currentIdx) {
+  @override
+  void initState() {
+    super.initState();
+    // context.watch<BottomNavState>().addListener(() {
+    //   print("Current global idx: ${context.read<BottomNavState>().currentIdx}");
+    // });
+  }
+
+  Widget _getCurrenWidget(int idx) {
+    switch (idx) {
       case 0:
         return UsageSummaryScreen();
       case 1:
@@ -73,10 +93,12 @@ class __WasserAppContainerState extends State<_WasserAppContainer> {
 
   @override
   Widget build(BuildContext context) {
+    var activeIdx = context.watch<BottomNavState>().currentIdx;
+
     return Scaffold(
-      body: _getCurrenWidget(),
+      body: _getCurrenWidget(activeIdx),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIdx,
+        currentIndex: activeIdx,
         selectedItemColor: Theme.of(context).accentColor,
         onTap: (idx) => _onActiveViewChanged(idx),
         items: <BottomNavigationBarItem>[

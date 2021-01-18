@@ -1,7 +1,15 @@
-enum MessageStatus { Sent, Received, Read }
-enum MessageQueueStatus { Queued, InProgress, Resolved, Parked }
-enum UserStatus { NOT_SET, ONLINE, AWAY, OFFLINE, DISABLES }
-enum UserRole { KNOWN_USER, AGENT, CUSTOMER, MANAGER, ADMIN }
+import 'package:flutter/material.dart';
+
+class BottomNavState with ChangeNotifier {
+  int _currentIdx = 0;
+
+  int get currentIdx => _currentIdx;
+
+  void setActivePageIdx(int idx) {
+    _currentIdx = idx;
+    notifyListeners();
+  }
+}
 
 class GenericOperationResult {
   bool successful = true;
