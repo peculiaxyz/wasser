@@ -11,8 +11,25 @@ class UsageSummaryScreen extends StatelessWidget {
   UsageSummaryScreen({this.navigator});
 
   List<RemainingBalanceModel> _mapToUsageModel(List<QueryDocumentSnapshot> documents) {
-    print("Attempting to map docs: $documents");
     return documents.map((e) => RemainingBalanceModel.fromJson(e.data())).toList();
+  }
+
+  List<RemainingBalanceModel> _mapTestData(List<Map<String, dynamic>> documents) {
+    return documents.map((e) => RemainingBalanceModel.fromJson(e)).toList();
+  }
+
+  _testDataStream() {
+    var initDate = DateTime.now();
+    List<Map<String, dynamic>> _testData = [
+      {"id": "rand1", "balance": 1200, "dateRecorded": Timestamp.fromDate(initDate)},
+      {"id": "rand2", "balance": 1600, "dateRecorded": Timestamp.fromDate(initDate.subtract(Duration(days: 1)))},
+      {"id": "rand3", "balance": 1901, "dateRecorded": Timestamp.fromDate(initDate.subtract(Duration(days: 2)))},
+      {"id": "rand4", "balance": 1955, "dateRecorded": Timestamp.fromDate(initDate.subtract(Duration(days: 3)))},
+      {"id": "rand3", "balance": 2901, "dateRecorded": Timestamp.fromDate(initDate.subtract(Duration(days: 4)))},
+      {"id": "rand3", "balance": 2001, "dateRecorded": Timestamp.fromDate(initDate.subtract(Duration(days: 5)))},
+      {"id": "rand3", "balance": 1501, "dateRecorded": Timestamp.fromDate(initDate.subtract(Duration(days: 6)))},
+    ];
+    return _testData; //Stream.fromIterable(_testData);
   }
 
   @override
@@ -28,13 +45,17 @@ class UsageSummaryScreen extends StatelessWidget {
             height: 52,
           ),
           StreamBuilder(
-            stream: _usageService.getRecentUsageInfo(),
+            stream: null,
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) return CircularProgressIndicator();
+              // if (!snapshot.hasData) return CircularProgressIndicator();
 
-              return BarChartSample4(
-                usageData: _mapToUsageModel(snapshot.data.docs),
-              );
+              // return BarChartSample4(
+              //   usageData: _mapToUsageModel(snapshot.data.docs),
+              // );
+
+              var dat = _mapTestData(_testDataStream());
+
+              return BarChartSample4(usageData: dat);
             },
           ),
         ]),
