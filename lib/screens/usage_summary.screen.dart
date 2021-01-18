@@ -7,6 +7,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UsageSummaryScreen extends StatelessWidget {
   final void Function(BuildContext context, int idx) navigator;
   final _usageService = WaterUsageDataService();
+  static const _periods = const ["Last 7 days", "Latest Month", "Year to date", "Last 5 years", "All time"];
+  final List<DropdownMenuItem<String>> _periodselectdropdownItems = _periods
+      .map((e) => DropdownMenuItem<String>(
+            value: e,
+            child: Text(e),
+          ))
+      .toList();
+  int _selectedPeriodIdx = 0;
 
   UsageSummaryScreen({this.navigator});
 
@@ -40,9 +48,17 @@ class UsageSummaryScreen extends StatelessWidget {
       ),
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text("Last 7 days"),
+          ListTile(
+            title: Text("Selected period"),
+            trailing: DropdownButton(
+                value: _periods[_selectedPeriodIdx],
+                onChanged: (String newValue) {
+                  // setState({}) TODO
+                },
+                items: _periodselectdropdownItems),
+          ),
           SizedBox(
-            height: 52,
+            height: 24,
           ),
           StreamBuilder(
             stream: null,

@@ -63,12 +63,12 @@ class BarChartSample4State extends State<BarChartSample4> {
                   },
                 ),
                 leftTitles: SideTitles(
-                  reservedSize: 60,
                   getTitles: (val) {
-                    if (val.toDouble() % 100 != 0) return '';
-                    return "$val";
+                    if (val.toInt() % 150 != 0) return '';
+                    var value = val / 1000;
+                    return "$value";
                   },
-                  showTitles: false,
+                  showTitles: true,
                   getTextStyles: (value) => const TextStyle(
                       color: Color(
                         0xff939393,
@@ -79,9 +79,11 @@ class BarChartSample4State extends State<BarChartSample4> {
               ),
               axisTitleData: FlAxisTitleData(
                   show: true,
-                  leftTitle: AxisTitle(titleText: "Usage in litres"),
-                  bottomTitle: AxisTitle(titleText: "Date recorded"),
-                  topTitle: AxisTitle(titleText: "Last 7 days")),
+                  leftTitle: AxisTitle(titleText: "Usage in Kilolitres", showTitle: true),
+                  bottomTitle: AxisTitle(
+                    titleText: "Date recorded",
+                  ),
+                  topTitle: AxisTitle(titleText: "Last 7 days", showTitle: true)),
               gridData: FlGridData(
                 show: false,
                 checkToShowHorizontalLine: (value) => value % 10 == 0,
