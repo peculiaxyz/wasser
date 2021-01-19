@@ -59,7 +59,8 @@ class _TrackUsageScreenState extends State<TrackUsageScreen> {
         _isLoading = true;
       });
       var remainingBalance = double.parse(_balanceController.text);
-      var data = RemainingBalanceModel(balance: remainingBalance, dateRecorded: _dateRecorded);
+      var dateOnly = DateTime(_dateRecorded.year, _dateRecorded.month, _dateRecorded.day);
+      var data = RemainingBalanceModel(balance: remainingBalance, dateRecorded: dateOnly);
       await _usageService.saveRemainingWaterBalance(data);
       _balanceController.clear();
       _notify("Water balance saved", context);

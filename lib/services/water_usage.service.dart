@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wasser/models/models_proxy.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:uuid/uuid.dart';
 import 'package:wasser/shared/shared_proxy.dart' show Logging;
 
 class WaterUsageDataService {
@@ -32,10 +32,11 @@ class WaterUsageDataService {
         log.d("Found existing record ${existingRecord.id} for specified date, updating the balance");
         return Future.value(GenericOperationResult.success());
       }
-      print("Saving balance data: ${data.toJson()}");
-      DocumentReference docRef = await _dbUsageRef.add(data.toJson());
-      await docRef.update({"id": docRef.id});
-      log.i("New Balance record# ${docRef.id} successully created");
+      String newRecordId = Uuid().v4().toString();
+      data.id = newRecordId;
+      await _dbUsageRef.doc(newRecordId).set(data.toJson());
+
+      log.i("New Balance record# $newRecordId successully created");
       return Future.value(GenericOperationResult.success(successMessage: "Balance record successully created"));
     } catch (e) {
       log.wtf("Remaining balance persistence error $e");
