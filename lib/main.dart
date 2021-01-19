@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:wasser/screens/track.screen.dart';
 import 'package:provider/provider.dart';
 import 'models/models_proxy.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +12,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => BottomNavState()),
+        ChangeNotifierProvider(create: (_) => SamplePeriodState()),
       ],
       child: const WasserApp(),
     ),
@@ -21,13 +21,6 @@ void main() async {
 
 class WasserApp extends StatelessWidget {
   const WasserApp({Key key}) : super(key: key);
-  // final _routes = {
-  //       "/": (context) => _WasserAppContainer(),
-  //       "/usage": (context) => UsageSummaryScreen(),
-  //       "/balance": (context) => UsageSummaryScreen(),
-  //       "/track": (context) => TrackUsageScreen(),
-  // };
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

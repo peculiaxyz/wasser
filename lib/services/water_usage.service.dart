@@ -5,8 +5,8 @@ class WaterUsageDataService {
   final CollectionReference _dbUsageRef = FirebaseFirestore.instance.collection('waterusage');
 
   /// Last 7 days usage info
-  Stream<QuerySnapshot> getRecentUsageInfo() {
-    return _dbUsageRef.snapshots();
+  Stream<QuerySnapshot> getRecentUsageInfo(int limit) {
+    return _dbUsageRef.limit(limit).snapshots();
   }
 
   Future<GenericOperationResult> saveRemainingWaterBalance(RemainingBalanceModel data) async {

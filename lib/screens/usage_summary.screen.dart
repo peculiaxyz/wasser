@@ -3,23 +3,46 @@ import 'package:wasser/models/models_proxy.dart';
 import 'package:wasser/widgets/bar_chart.widget.dart';
 import 'package:wasser/services/services_proxy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:wasser/shared/shared_proxy.dart' show calculateWaterUsage;
 
-class UsageSummaryScreen extends StatelessWidget {
+class UsageSummaryScreen extends StatefulWidget {
   final void Function(BuildContext context, int idx) navigator;
+  UsageSummaryScreen({this.navigator});
+
+  @override
+  _UsageSummaryScreenState createState() => _UsageSummaryScreenState();
+}
+
+class _UsageSummaryScreenState extends State<UsageSummaryScreen> {
+  String _samplePeriod = SamplePeriodState.periods[0];
   final _usageService = WaterUsageDataService();
-  static const _periods = const ["Last 7 days", "Latest Month", "Year to date", "Last 5 years", "All time"];
-  final List<DropdownMenuItem<String>> _periodselectdropdownItems = _periods
+  final _selectedPeriodTextStyle = TextStyle(fontSize: 12, color: Colors.black54);
+  final List<DropdownMenuItem<String>> _periodselectdropdownItems = SamplePeriodState.periods
       .map((e) => DropdownMenuItem<String>(
             value: e,
             child: Text(e),
           ))
       .toList();
-  int _selectedPeriodIdx = 0;
 
-  UsageSummaryScreen({this.navigator});
+  List<WaterUsage> _mapToUsageModel(List<QueryDocumentSnapshot> documents) {
+    var balanceData = documents.map((e) => RemainingBalanceModel.fromJson(e.data())).toList();
+    return calculateWaterUsage(balanceData);
+  }
 
-  List<RemainingBalanceModel> _mapToUsageModel(List<QueryDocumentSnapshot> documents) {
-    return documents.map((e) => RemainingBalanceModel.fromJson(e.data())).toList();
+  _onSamplePeriodChanged(String newPeriod) {
+    _samplePeriod = newPeriod;
+    context.read<SamplePeriodState>().setSamplePeriod(newPeriod);
+  }
+
+  _fetchUsageData() {
+    switch (_samplePeriod) {
+      case SamplePeriodState.PERIOD_LAST_7_DAYS:
+        return _usageService.getRecentUsageInfo(7);
+      default:
+        print("Unsuported sample size");
+        break;
+    }
   }
 
   List<RemainingBalanceModel> _mapTestData(List<Map<String, dynamic>> documents) {
@@ -49,29 +72,27 @@ class UsageSummaryScreen extends StatelessWidget {
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           ListTile(
-            title: Text("Selected period"),
+            title: Text(
+              "Selected period",
+              style: _selectedPeriodTextStyle,
+            ),
             trailing: DropdownButton(
-                value: _periods[_selectedPeriodIdx],
-                onChanged: (String newValue) {
-                  // setState({}) TODO
-                },
+                style: _selectedPeriodTextStyle,
+                value: context.watch<SamplePeriodState>().currentSamplePeriod,
+                onChanged: (s) => _onSamplePeriodChanged(s),
                 items: _periodselectdropdownItems),
           ),
           SizedBox(
-            height: 24,
+            height: 16,
           ),
           StreamBuilder(
-            stream: null,
+            stream: _fetchUsageData(),
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              // if (!snapshot.hasData) return CircularProgressIndicator();
+              if (!snapshot.hasData) return CircularProgressIndicator();
 
-              // return BarChartSample4(
-              //   usageData: _mapToUsageModel(snapshot.data.docs),
-              // );
-
-              var dat = _mapTestData(_testDataStream());
-
-              return BarChartSample4(usageData: dat);
+              return BarChartSample4(
+                usageData: _mapToUsageModel(snapshot.data.docs),
+              );
             },
           ),
         ]),

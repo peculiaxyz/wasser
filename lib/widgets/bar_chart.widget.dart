@@ -1,10 +1,11 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:wasser/models/models_proxy.dart';
 
 class BarChartSample4 extends StatefulWidget {
-  final List<RemainingBalanceModel> usageData;
+  final List<WaterUsage> usageData;
 
   @override
   State<StatefulWidget> createState() => BarChartSample4State();
@@ -17,13 +18,19 @@ class BarChartSample4State extends State<BarChartSample4> {
   final Color normal = const Color(0xff64caad);
   final Color light = const Color(0xff73e8c9);
   final Map<int, DateTime> xSeries = {};
+  final List<WaterUsage> usageList = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
-    widget.usageData.sort((a, b) => a.dateRecorded.compareTo(b.dateRecorded));
+    // Must plot the latest date last. 
+    // TODO: Move to parent widget for better flexibility
+    usageList.sort((a, b) => a.dateRecorded.compareTo(b.dateRecorded));
+    _populateXSeriesData();
+  }
+
+  _populateXSeriesData() {
     int position = 0;
     for (var item in widget.usageData) {
       xSeries[position] = item.dateRecorded;
@@ -37,6 +44,8 @@ class BarChartSample4State extends State<BarChartSample4> {
 
   @override
   Widget build(BuildContext context) {
+    var chatTitle = context.watch<SamplePeriodState>().currentSamplePeriod;
+
     return AspectRatio(
       aspectRatio: 1.66,
       child: Card(
@@ -83,7 +92,7 @@ class BarChartSample4State extends State<BarChartSample4> {
                   bottomTitle: AxisTitle(
                     titleText: "Date recorded",
                   ),
-                  topTitle: AxisTitle(titleText: "Last 7 days", showTitle: true)),
+                  topTitle: AxisTitle(titleText: chatTitle, showTitle: true)),
               gridData: FlGridData(
                 show: false,
                 checkToShowHorizontalLine: (value) => value % 10 == 0,
@@ -106,13 +115,11 @@ class BarChartSample4State extends State<BarChartSample4> {
 
   List<BarChartGroupData> getData() {
     int xAxisPosition = -1;
-    var data = widget.usageData;
-    // data.sort((a, b) => a.dateRecorded.compareTo(b.dateRecorded));
-    return data.map((e) {
+    return widget.usageData.map((e) {
       xAxisPosition++;
       return BarChartGroupData(x: xAxisPosition, barRods: [
         BarChartRodData(
-            width: 20, y: e.balance, rodStackItems: [BarChartRodStackItem(xAxisPosition as double, e.balance, dark)])
+            width: 20, y: e.usage, rodStackItems: [BarChartRodStackItem(xAxisPosition as double, e.usage, dark)])
       ]);
     }).toList();
   }
