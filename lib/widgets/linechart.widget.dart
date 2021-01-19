@@ -69,22 +69,16 @@ class _WasserLineChartState extends State<WasserLineChart> {
           show: true,
           bottomTitles: SideTitles(
             showTitles: true,
-            reservedSize: 22,
-            getTextStyles: (value) =>
-                const TextStyle(color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 16),
+            getTextStyles: (value) => const TextStyle(color: Color(0xff68737d), fontSize: 12),
             getTitles: getxAxisLabel,
-            margin: 8,
+            margin: 4,
           ),
           leftTitles: SideTitles(
-            showTitles: true,
-            getTextStyles: (value) => const TextStyle(
-              color: Color(0xff67727d),
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-            ),
-            getTitles: getyAxisLabel,
-            margin: 8,
-          ),
+              showTitles: true,
+              getTextStyles: (value) =>
+                  const TextStyle(color: Color(0xff67727d), fontSize: 10, fontWeight: FontWeight.bold),
+              getTitles: getyAxisLabel,
+              rotateAngle: -90),
         ),
         borderData: FlBorderData(show: true, border: Border.all(color: const Color(0xff37434d), width: 1)),
         lineBarsData: [
@@ -92,7 +86,7 @@ class _WasserLineChartState extends State<WasserLineChart> {
             spots: _prepareChartData(),
             isCurved: true,
             colors: gradientColors,
-            barWidth: 5,
+            barWidth: 3,
             isStrokeCapRound: true,
             dotData: FlDotData(
               show: true,
@@ -113,7 +107,7 @@ class _WasserLineChartState extends State<WasserLineChart> {
   }
 
   String getyAxisLabel(double val) {
-    if (val.toInt() % 150 != 0) return '';
+    if (val.toInt() % 350 != 0) return '';
     var value = val / 1000;
     return "$value";
   }

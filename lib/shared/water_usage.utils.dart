@@ -9,11 +9,5 @@ List<WaterUsage> calculateWaterUsage(List<RemainingBalanceModel> balanceData) {
 
     return WaterUsage(usageID: e.id, dateRecorded: e.dateRecorded, usage: (approxUsage).abs());
   }).toList();
-
-  print("Usage transformation result: ");
-  for (var item in result) {
-    print(item.toJson());
-  }
-
   return result;
 }

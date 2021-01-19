@@ -3,10 +3,18 @@ import 'package:wasser/screens/screens.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'models/models_proxy.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:wasser/shared/shared_proxy.dart' show Logging;
 
+final log = Logging.getLogger();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  if (kIsWeb) {
+    FirebaseFirestore.instance.enablePersistence();
+    log.d("Web detected, enabling firstore offline persistance");
+  }
   runApp(
     MultiProvider(
       providers: [

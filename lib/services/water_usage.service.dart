@@ -10,10 +10,6 @@ class WaterUsageDataService {
   final CollectionReference _dbUsageRef = FirebaseFirestore.instance.collection('waterusage');
 
   WaterUsageDataService() {
-    if (kIsWeb) {
-      FirebaseFirestore.instance.enablePersistence();
-      log.d("Web detected Enabling firestore local persistence");
-    }
   }
 
   /// Last 7 days usage info
@@ -21,13 +17,28 @@ class WaterUsageDataService {
     return _dbUsageRef.limit(limit).snapshots();
   }
 
+  Future<RemainingBalanceModel> getByDateRecorded(RemainingBalanceModel data) async {
+    QuerySnapshot res =
+        await _dbUsageRef.where("dateRecorded", isEqualTo: data.toJson()["dateRecorded"]).limit(1).get();
+    if (res.size <= 0) return null;
+    var existingRec = res.docs[0].data();
+    return RemainingBalanceModel.fromJson(existingRec);
+  }
+
   Future<GenericOperationResult> saveRemainingWaterBalance(RemainingBalanceModel data) async {
     try {
+      var existingRecord = await getByDateRecorded(data);
+      if (existingRecord != null) {
+        await _dbUsageRef.doc(existingRecord.id).update(data.toJson());
+        log.d("Found existing record ${existingRecord.id} for specified date, updating the balance");
+        return Future.value(GenericOperationResult.success());
+      }
       DocumentReference docRef = await _dbUsageRef.add(data.toJson());
       await docRef.update({"id": docRef.id});
+      log..i("New Balance record# ${docRef.id} successully created");
       return Future.value(GenericOperationResult.success(successMessage: "Balance record successully created"));
     } catch (e) {
-      print("Remaining balance persistence error $e");
+      log.wtf("Remaining balance persistence error $e");
       return Future.value(GenericOperationResult.failed());
     }
   }
