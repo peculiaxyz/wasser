@@ -59,7 +59,7 @@ class WasserBarChartState extends State<WasserBarChart> {
             bottomTitles: SideTitles(
               showTitles: true,
               getTextStyles: (value) => const TextStyle(color: Color(0xff939393), fontSize: 12),
-              margin: 4,
+              margin: 64,
               getTitles: getxAxisLabel,
             ),
             leftTitles: SideTitles(
@@ -99,8 +99,12 @@ class WasserBarChartState extends State<WasserBarChart> {
   }
 
   String getxAxisLabel(double value) {
+    var m = {'Mon': 'M', 'Tue': 'T', 'Wed': 'W', 'Thu': 'T', 'Fri': 'F', 'Sat': 'S', 'Sun': 'S'};
     DateTime dt = xSeries[value.toInt()];
-    return DateFormat("EEE dd").format(dt);
+    var dayAbbr = DateFormat("E").format(dt);
+    var day = DateFormat("dd").format(dt);
+    return "${m[dayAbbr]} $day";
+    // return DateFormat("E dd").format(dt);
   }
 
   String getyAxisLabel(double val) {

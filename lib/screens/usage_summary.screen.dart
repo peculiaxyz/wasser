@@ -24,6 +24,7 @@ class _UsageSummaryScreenState extends State<UsageSummaryScreen> {
   final List<DropdownMenuItem<String>> _periodselectdropdownItems = SamplePeriodState.periods
       .map((e) => DropdownMenuItem<String>(
             value: e,
+            
             child: Text(e),
           ))
       .toList();
