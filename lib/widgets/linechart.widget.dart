@@ -103,7 +103,7 @@ class _WasserLineChartState extends State<WasserLineChart> {
 
   String getxAxisLabel(double value) {
     DateTime dt = xSeries[value.toInt()];
-    return DateFormat("EEE").format(dt);
+    return DateFormat("EEE dd").format(dt);
   }
 
   String getyAxisLabel(double val) {

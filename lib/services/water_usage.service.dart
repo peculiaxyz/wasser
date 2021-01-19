@@ -9,8 +9,7 @@ class WaterUsageDataService {
   final log = Logging.getLogger();
   final CollectionReference _dbUsageRef = FirebaseFirestore.instance.collection('waterusage');
 
-  WaterUsageDataService() {
-  }
+  WaterUsageDataService() {}
 
   /// Last 7 days usage info
   Stream<QuerySnapshot> getRecentUsageInfo(int limit) {
@@ -33,9 +32,10 @@ class WaterUsageDataService {
         log.d("Found existing record ${existingRecord.id} for specified date, updating the balance");
         return Future.value(GenericOperationResult.success());
       }
+      print("Saving balance data: ${data.toJson()}");
       DocumentReference docRef = await _dbUsageRef.add(data.toJson());
       await docRef.update({"id": docRef.id});
-      log..i("New Balance record# ${docRef.id} successully created");
+      log.i("New Balance record# ${docRef.id} successully created");
       return Future.value(GenericOperationResult.success(successMessage: "Balance record successully created"));
     } catch (e) {
       log.wtf("Remaining balance persistence error $e");

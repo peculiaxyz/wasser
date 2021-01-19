@@ -58,12 +58,9 @@ class _TrackUsageScreenState extends State<TrackUsageScreen> {
       setState(() {
         _isLoading = true;
       });
-      var data = RemainingBalanceModel(balance: _remainingBalance, dateRecorded: _dateRecorded);
+      var remainingBalance = double.parse(_balanceController.text);
+      var data = RemainingBalanceModel(balance: remainingBalance, dateRecorded: _dateRecorded);
       await _usageService.saveRemainingWaterBalance(data);
-      setState(() {
-        _remainingBalance = 0;
-        _dateRecorded = DateTime.now();
-      });
       _balanceController.clear();
       _notify("Water balance saved", context);
       context.read<BottomNavState>().setActivePageIdx(0);
@@ -74,11 +71,13 @@ class _TrackUsageScreenState extends State<TrackUsageScreen> {
       // Navigator.pop(context); //pop dialog
       setState(() {
         _isLoading = false;
+        _remainingBalance = 0;
+        _dateRecorded = DateTime.now();
       });
     }
   }
 
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _showDatePicker(BuildContext context) async {
     final DateTime selectedDate = await showDatePicker(
         context: context,
         initialDate: _dateRecorded,
@@ -88,30 +87,6 @@ class _TrackUsageScreenState extends State<TrackUsageScreen> {
       setState(() {
         _dateRecorded = selectedDate;
       });
-  }
-
-  _onBalanceChanged(BuildContext context, String val) {
-    print("Balance changed $val");
-    if (_formKey.currentState.validate()) {
-      setState(() {
-        _remainingBalance = double.parse(val);
-      });
-    }
-  }
-
-  void _onLoading(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-      },
-    );
   }
 
   String humanReadableDate(DateTime dt) {
@@ -143,7 +118,7 @@ class _TrackUsageScreenState extends State<TrackUsageScreen> {
                       "Change date",
                       style: TextStyle(color: Theme.of(context).accentColor),
                     ),
-                    onTap: () => _selectDate(context),
+                    onTap: () => _showDatePicker(context),
                   ),
                 )
               ],
