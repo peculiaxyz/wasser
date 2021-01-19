@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wasser/screens/screens.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:wasser/screens/track.screen.dart';
 import 'package:provider/provider.dart';
 import 'models/models_proxy.dart';
 
@@ -76,7 +75,7 @@ class __WasserAppContainerState extends State<_WasserAppContainer> {
       case 0:
         return UsageSummaryScreen();
       case 1:
-        return UsageSummaryScreen();
+        return BalanceSummaryScreen();
       case 2:
         return TrackUsageScreen();
       default:
