@@ -124,6 +124,6 @@ class _WasserLineChartState extends State<WasserLineChart> {
     return data.map((e) {
       position++;
       return FlSpot(position.toDouble(), e.balance);
-    });
+    }).toList();
   }
 }

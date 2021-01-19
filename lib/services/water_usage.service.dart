@@ -1,8 +1,20 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wasser/models/models_proxy.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:wasser/shared/shared_proxy.dart' show Logging;
 
 class WaterUsageDataService {
+  final log = Logging.getLogger();
   final CollectionReference _dbUsageRef = FirebaseFirestore.instance.collection('waterusage');
+
+  WaterUsageDataService() {
+    if (kIsWeb) {
+      FirebaseFirestore.instance.enablePersistence();
+      log.d("Web detected Enabling firestore local persistence");
+    }
+  }
 
   /// Last 7 days usage info
   Stream<QuerySnapshot> getRecentUsageInfo(int limit) {
