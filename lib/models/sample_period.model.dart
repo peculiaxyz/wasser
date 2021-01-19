@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class SamplePeriodState with ChangeNotifier {
+  static const int DEFAULT_SAMPLE_SIZE = 7;
   static const PERIOD_LAST_7_DAYS = "Last 7 days";
   static const periods = const ["Last 7 days", "Latest Month", "Year to date", "Last 5 years", "All time"];
 

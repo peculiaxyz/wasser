@@ -4,6 +4,7 @@ import 'package:wasser/services/services_proxy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:wasser/widgets/widgets.dart' show WasserLineChart;
+import 'package:wasser/shared/shared_proxy.dart' show Logging;
 
 class BalanceSummaryScreen extends StatefulWidget {
   final void Function(BuildContext context, int idx) navigator;
@@ -14,6 +15,7 @@ class BalanceSummaryScreen extends StatefulWidget {
 }
 
 class _BalanceSummaryScreenState extends State<BalanceSummaryScreen> {
+  var log = Logging.getLogger();
   String _samplePeriod = SamplePeriodState.periods[0];
   final _usageService = WaterUsageDataService();
   final _selectedPeriodTextStyle = TextStyle(fontSize: 12, color: Colors.black54);
@@ -38,8 +40,8 @@ class _BalanceSummaryScreenState extends State<BalanceSummaryScreen> {
       case SamplePeriodState.PERIOD_LAST_7_DAYS:
         return _usageService.getRecentUsageInfo(7);
       default:
-        print("Unsuported sample size");
-        break;
+        log.w("Unsuported sample size/period [$_samplePeriod]");
+        return _usageService.getRecentUsageInfo(SamplePeriodState.DEFAULT_SAMPLE_SIZE);
     }
   }
 

@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:wasser/models/models_proxy.dart';
+import 'package:wasser/widgets/widgets.dart';
 
-class BarChartSample4 extends StatefulWidget {
+class WasserBarChart extends StatefulWidget {
   final List<WaterUsage> usageData;
 
   @override
-  State<StatefulWidget> createState() => BarChartSample4State();
+  State<StatefulWidget> createState() => WasserBarChartState();
 
-  BarChartSample4({this.usageData});
+  WasserBarChart({this.usageData});
 }
 
-class BarChartSample4State extends State<BarChartSample4> {
+class WasserBarChartState extends State<WasserBarChart> {
   final Color dark = const Color(0xff3b8c75);
   final Color normal = const Color(0xff64caad);
   final Color light = const Color(0xff73e8c9);
@@ -24,7 +25,7 @@ class BarChartSample4State extends State<BarChartSample4> {
   void initState() {
     super.initState();
 
-    // Must plot the latest date last. 
+    // Must plot the latest date last.
     // TODO: Move to parent widget for better flexibility
     usageList.sort((a, b) => a.dateRecorded.compareTo(b.dateRecorded));
     _populateXSeriesData();
@@ -46,71 +47,67 @@ class BarChartSample4State extends State<BarChartSample4> {
   Widget build(BuildContext context) {
     var chatTitle = context.watch<SamplePeriodState>().currentSamplePeriod;
 
-    return AspectRatio(
-      aspectRatio: 1.66,
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 16.0),
-          child: BarChart(
-            BarChartData(
-              alignment: BarChartAlignment.center,
-              barTouchData: BarTouchData(
-                enabled: true,
-              ),
-              titlesData: FlTitlesData(
-                show: true,
-                bottomTitles: SideTitles(
-                  showTitles: true,
-                  getTextStyles: (value) => const TextStyle(color: Color(0xff939393), fontSize: 8),
-                  margin: 20,
-                  getTitles: (double value) {
-                    DateTime dt = xSeries[value.toInt()];
-                    return formatChatDate(dt);
-                  },
-                ),
-                leftTitles: SideTitles(
-                  getTitles: (val) {
-                    if (val.toInt() % 150 != 0) return '';
-                    var value = val / 1000;
-                    return "$value";
-                  },
-                  showTitles: true,
-                  getTextStyles: (value) => const TextStyle(
-                      color: Color(
-                        0xff939393,
-                      ),
-                      fontSize: 10),
-                  margin: 0,
-                ),
-              ),
-              axisTitleData: FlAxisTitleData(
-                  show: true,
-                  leftTitle: AxisTitle(titleText: "Usage in Kilolitres", showTitle: true),
-                  bottomTitle: AxisTitle(
-                    titleText: "Date recorded",
+    return WasserChartContainer(
+      chartWidget: BarChart(
+        BarChartData(
+          alignment: BarChartAlignment.center,
+          barTouchData: BarTouchData(
+            enabled: true,
+          ),
+          titlesData: FlTitlesData(
+            show: true,
+            bottomTitles: SideTitles(
+              showTitles: true,
+              getTextStyles: (value) => const TextStyle(color: Color(0xff939393), fontSize: 12),
+              margin: 20,
+              getTitles: getxAxisLabel,
+            ),
+            leftTitles: SideTitles(
+              getTitles: getyAxisLabel,
+              showTitles: true,
+              getTextStyles: (value) => const TextStyle(
+                  color: Color(
+                    0xff939393,
                   ),
-                  topTitle: AxisTitle(titleText: chatTitle, showTitle: true)),
-              gridData: FlGridData(
-                show: false,
-                checkToShowHorizontalLine: (value) => value % 10 == 0,
-                getDrawingHorizontalLine: (value) => FlLine(
-                  color: const Color(0xffe7e8ec),
-                  strokeWidth: 0,
-                ),
-              ),
-              borderData: FlBorderData(
-                show: false,
-              ),
-              groupsSpace: 10,
-              barGroups: getData(),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10),
+              margin: 0,
             ),
           ),
+          axisTitleData: FlAxisTitleData(
+              show: true,
+              leftTitle: AxisTitle(titleText: "Usage in Kilolitres", showTitle: true),
+              bottomTitle: AxisTitle(
+                titleText: "Date recorded",
+              ),
+              topTitle: AxisTitle(titleText: chatTitle, showTitle: true)),
+          gridData: FlGridData(
+            show: false,
+            checkToShowHorizontalLine: (value) => value % 10 == 0,
+            getDrawingHorizontalLine: (value) => FlLine(
+              color: const Color(0xffe7e8ec),
+              strokeWidth: 0,
+            ),
+          ),
+          borderData: FlBorderData(
+            show: false,
+          ),
+          groupsSpace: 10,
+          barGroups: getData(),
         ),
       ),
     );
+  }
+
+  String getxAxisLabel(double value) {
+    DateTime dt = xSeries[value.toInt()];
+    return DateFormat("EEE").format(dt);
+  }
+
+  String getyAxisLabel(double val) {
+    if (val.toInt() % 150 != 0) return '';
+    var value = val / 1000;
+    return "$value";
   }
 
   List<BarChartGroupData> getData() {
