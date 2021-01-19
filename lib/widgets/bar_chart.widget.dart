@@ -82,8 +82,8 @@ class WasserBarChartState extends State<WasserBarChart> {
               ),
               topTitle: AxisTitle(titleText: chatTitle, showTitle: true)),
           gridData: FlGridData(
-            show: false,
-            checkToShowHorizontalLine: (value) => value % 10 == 0,
+            show: true,
+            checkToShowHorizontalLine: (value) => value % 500 == 0,
             getDrawingHorizontalLine: (value) => FlLine(
               color: const Color(0xffe7e8ec),
               strokeWidth: 0,
@@ -104,7 +104,7 @@ class WasserBarChartState extends State<WasserBarChart> {
   }
 
   String getyAxisLabel(double val) {
-    if (val.toInt() % 150 != 0) return '';
+    if (val.toInt() % 500 != 0) return '';
     var value = val / 1000;
     return "$value";
   }

@@ -107,7 +107,7 @@ class _WasserLineChartState extends State<WasserLineChart> {
   }
 
   String getyAxisLabel(double val) {
-    if (val.toInt() % 350 != 0) return '';
+    if (val.toInt() % 500 != 0) return '';
     var value = val / 1000;
     return "$value";
   }
