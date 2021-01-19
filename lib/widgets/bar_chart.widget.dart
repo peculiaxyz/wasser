@@ -59,7 +59,7 @@ class WasserBarChartState extends State<WasserBarChart> {
             bottomTitles: SideTitles(
               showTitles: true,
               getTextStyles: (value) => const TextStyle(color: Color(0xff939393), fontSize: 12),
-              margin: 20,
+              margin: 4,
               getTitles: getxAxisLabel,
             ),
             leftTitles: SideTitles(
@@ -92,7 +92,6 @@ class WasserBarChartState extends State<WasserBarChart> {
           borderData: FlBorderData(
             show: false,
           ),
-          groupsSpace: 10,
           barGroups: getData(),
         ),
       ),
