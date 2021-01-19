@@ -28,6 +28,8 @@ class WaterUsageDataService {
     try {
       var existingRecord = await getByDateRecorded(data);
       if (existingRecord != null) {
+        log.d("Balance record exists for date ${data.dateRecorded.toString()} With Id ${existingRecord.id}");
+        data.id = existingRecord.id;
         await _dbUsageRef.doc(existingRecord.id).update(data.toJson());
         log.d("Found existing record ${existingRecord.id} for specified date, updating the balance");
         return Future.value(GenericOperationResult.success());
