@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "whatsappbusinesscustomdemo",
-    "qa": "whatsappbusinesscustomdemo"
+    "default": "peculia-demos",
+    "qa": "peculia-demos"
   }
 }

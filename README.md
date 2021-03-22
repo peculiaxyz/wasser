@@ -11,5 +11,5 @@
 
 #### Deploying
 
-* flutter build
+* flutter build web
 * firebase deploy --only hosting:wasser-02 -m "Site update"
