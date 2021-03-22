@@ -47,8 +47,6 @@ class _WasserAppContainer extends StatefulWidget {
 }
 
 class __WasserAppContainerState extends State<_WasserAppContainer> {
-  int _currentIdx = 0;
-
   void navigate(BuildContext context, int pageIdx) {
     switch (pageIdx) {
       case 0:
@@ -66,17 +64,11 @@ class __WasserAppContainerState extends State<_WasserAppContainer> {
 
   _onActiveViewChanged(int viewIdx) {
     context.read<BottomNavState>().setActivePageIdx(viewIdx);
-    // setState(() {
-    //   _currentIdx = viewIdx;
-    // });
   }
 
   @override
   void initState() {
     super.initState();
-    // context.watch<BottomNavState>().addListener(() {
-    //   print("Current global idx: ${context.read<BottomNavState>().currentIdx}");
-    // });
   }
 
   Widget _getCurrenWidget(int idx) {

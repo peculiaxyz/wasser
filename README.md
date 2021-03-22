@@ -12,4 +12,4 @@
 #### Deploying
 
 * flutter build
-* firebase deploy --only hosting:wasserpeculia -m "Site update"
+* firebase deploy --only hosting:wasser-02 -m "Site update"
